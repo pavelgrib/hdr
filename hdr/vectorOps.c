@@ -29,8 +29,28 @@ float* scaleVector(float* vector, const int length, const float scalar) {
     return vector;
 }
 
-float* addVectors( const float* vector1, const float* vector2, float* sumVector, const int length) {
+void addVectors( const float* vector1, const float* vector2, float* sumVector, const int length) {
     unsigned int i;
     for ( i = 0; i < length; ++ i ) sumVector[i] = vector1[i] + vector2[i];
-    return sumVector;
+}
+
+void printImageData(const void* data, const int height, const int maxHeight, const int width,
+                    const int maxWidth, const int numChannels, const int channel)
+{
+    unsigned int i, j, idx;
+    printf("------------ printing channel %d of array of size %d by %d -----------\n",
+           channel, maxHeight, maxWidth);
+    for ( i = 0; i < height; ++i) {
+        for ( j = 0; j < width; ++j) {
+            idx = (i*maxWidth + j)*numChannels + channel;
+            printf("%0.02f ", ((float*)data)[idx]);
+        }
+        printf("\n");
+    }
+    printf("------------------------ end printing -----------------------------\n");
+}
+
+void printImage(const FP_IMG* image, const int maxHeight, const int maxWidth, const int channel) {
+    printImageData(image->data, image->height, maxHeight,
+                   image->width, maxWidth, image->numComponents, channel);
 }

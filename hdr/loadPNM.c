@@ -223,8 +223,9 @@ void WritePFM( const char* filename, FP_IMG* image ) {
 	// write image data upside down!!!
     // since we flipped the image upside-down when we read it
  	// we have to write it upside-down so it's stored the right way
-    for( i = image->height - 1; i >= 0; --i )
+    for( i = image->height - 1; i >= 0; --i ) {
         fwrite( &image->data[i * image->width * image->numComponents],
                sizeof(float), image->width * image->numComponents, fp );
+    }
 	fclose(fp);
 }
