@@ -77,14 +77,14 @@ void makeHDRImage(const char* imagesDirectory, FP_IMG* hdrImage) {
 	hdrImage->maxVal = maxPix;
 	hdrImage->minVal = minPix;
 	hdrImage->avgVal = avgPix;
-
+    
     // since I malloc'd them here, I'll delete them here too
 	for ( i = 0; i < numImages; ++i ) {
         cleanupFP(fpImages[i]);
 	}
 }
 
-void toneMap(FP_IMG* inputImage, FP_IMG* outputImage) {
+void toneMap(const FP_IMG* inputImage, FP_IMG* outputImage) {
 	unsigned int i, j, k, idx, height, width, numComponents;
 	height = inputImage->height;
 	width = inputImage->width;
@@ -102,7 +102,7 @@ void toneMap(FP_IMG* inputImage, FP_IMG* outputImage) {
         avg[k] = 0.0;
         count[k] = 0;
         stretch[k] = 1.0 / (inputImage->maxVal[k] - inputImage->minVal[k]);
-        printf("%d stretch is %f\n", k, stretch[k]);
+//        printf("%d stretch is %f\n", k, stretch[k]);
     }
     
     for ( i = 0; i < height; ++i ) {
@@ -110,7 +110,6 @@ void toneMap(FP_IMG* inputImage, FP_IMG* outputImage) {
             for ( k = 0; k < numComponents; ++k ) {
                 idx = (i * width + j)*numComponents + k;
                 outputData[idx] = fmin(inputImage->data[idx] * stretch[k], 1.0);
-//                if ( idx < 10 ) printf("%f ==> %f\n", inputImage->data[idx], outputData[idx]);
                 avg[k] += (outputData[idx] - avg[k]) / (++count[k]);
 			}
 		}
@@ -125,7 +124,7 @@ void toneMap(FP_IMG* inputImage, FP_IMG* outputImage) {
     outputImage->avgVal = avg;
 }
 
-void brightenPFM(FP_IMG* inputImage, FP_IMG* outputImage, const float scale) {
+void brightenPFM(const FP_IMG* inputImage, FP_IMG* outputImage, const float scale) {
     if ( scale <= 0 ) return;
     unsigned int i, j, k, idx, height, width, numComponents;
     height = inputImage->height;
@@ -158,6 +157,32 @@ void brightenPFM(FP_IMG* inputImage, FP_IMG* outputImage, const float scale) {
     outputImage->numComponents = numComponents;
 }
 
+void applyGamma(FP_IMG* image, const float gamma) {
+    int height, width, numComponents, i, j, k, idx;
+    height = image->height;
+    width = image->width;
+    numComponents = image->numComponents;
+    float* gammaData = (float*) malloc(sizeof(float) * width * height * numComponents);
+    int count[numComponents];
+    for ( k = 0; k < numComponents; ++k ) {
+        count[k] = 0;
+        image->avgVal[k] = 0;
+        image->minVal[k] = pow(image->minVal[k], gamma);
+        image->maxVal[k] = pow(image->maxVal[k], gamma);
+    }
+    
+    for ( i = 0; i < height; ++i ) {
+        for ( j = 0; j < width; ++j ) {
+            for ( k = 0; k < numComponents; ++k ) {
+                idx = (i*width + j)*numComponents + k;
+                image->data[idx] = pow(image->data[idx], 1.0/gamma);
+                image->avgVal[k] += ( gammaData[idx] - image->avgVal[k]) / (++count[k]);
+            }
+        }
+    }
+    
+}
+
 bool isPFM(const struct dirent* pent) {
 	char* pfm = "pfm";
 	if ( (pent)->d_namlen > 3 ) {
@@ -183,26 +208,25 @@ float w(const float z) {
 }
 
 float hdrValue(FP_IMG* images[], const int numImages, const int dataIndex) {
-	float sum = 0.0;
-	float val, tempHDRValue;
-	float sumWeights = 0.0;
-	FP_IMG* img;
-	int i;
-	// printf("%d: ", dataIndex);
+	float val, relExp, sum = 0.0, sumWeights = 0.0;
+    int i;
+
 	for ( i = 0; i < numImages; ++i ) {
-		sumWeights += w(images[i]->data[dataIndex]);
+        val = fmax(fmin(images[i]->data[dataIndex], UPPER_FP_TOLERANCE), LOWER_FP_TOLERANCE);
+            sumWeights += w(val);
 	}
 	
 	for ( i = 0; i < numImages; ++i ) {
-		img = images[i];
-		val = img->data[dataIndex];
-		if ( val > LOWER_FP_TOLERANCE && val < UPPER_FP_TOLERANCE ) {
-			tempHDRValue = w(val) * log2( val/(float)img->relativeExposure ) / sumWeights;
-			sum += tempHDRValue;
-		}
+        val = fmax(fmin(images[i]->data[dataIndex], UPPER_FP_TOLERANCE), LOWER_FP_TOLERANCE);
+//        val = images[i]->data[dataIndex];
+//		val = fmin(val, UPPER_FP_TOLERANCE);
+//        val = fmax(val, LOWER_FP_TOLERANCE);
+        relExp = (float) images[i]->relativeExposure;
+        sum += w(val) * log2( val/relExp );
 	}
-	// printf("--> %f\n", sumWeights);
-	return exp(sum);
+
+//    if ( dataIndex > 110 && dataIndex < 120 ) printf("%f\n", exp(sum/sumWeights));
+	return exp(sum/sumWeights);
 }
 
 void concatenate(const char* str1, const char* str2, char* buffer) {

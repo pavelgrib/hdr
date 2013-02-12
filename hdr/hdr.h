@@ -12,8 +12,9 @@
 #include <math.h>
 
 #define PI 3.14159265358979323
-#define HISTOGRAM_SIZE 1000
+#define HISTOGRAM_SIZE 500
 #define MAX_HDR_PIXEL_VALUE 1.0
+#define MIN_HDR_PIXEL_VALUE 0.0
 #define MAX_PPM_PIXEL_VALUE 255
 #define TM_MIN 3.0
 
@@ -22,9 +23,9 @@
 
 
 void makeHDRImage(const char* imagesDirectory, FP_IMG* hdrImage);
-void toneMap(FP_IMG* inputImage, FP_IMG* outputImage);
-void brightenPFM(FP_IMG* inputImage, FP_IMG* outputImage, const float scale);
-
+void toneMap(const FP_IMG* inputImage, FP_IMG* outputImage);
+void brightenPFM(const FP_IMG* inputImage, FP_IMG* outputImage, const float scale);
+void applyGamma(FP_IMG* image, const float gamma);
 float w(const float z);
 float hdrValue(FP_IMG* images[], const int numImages, const int dataIndex);
 
