@@ -1,0 +1,194 @@
+\documentclass[a4paper,12pt,oneside,final]{report}
+%\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+% \usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage[utf8]{inputenc}
+\usepackage{titlesec}
+\usepackage[titletoc]{appendix}
+\titleformat{\chapter}[hang]{\bf\Huge}{\thechapter}{1cm}{}
+
+\pagestyle{plain}
+% -------------------- this stuff for code --------------------
+
+\usepackage{anysize}
+\marginsize{30mm}{30mm}{20mm}{20mm}
+
+\newenvironment{formal}{%
+  \def\FrameCommand{%
+    \hspace{1pt}%
+    {\color{blue}\vrule width 2pt}%
+    {\color{formalshade}\vrule width 4pt}%
+    \colorbox{formalshade}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{7pt}%
+  \vspace{2pt}\vspace{2pt}%
+}
+{%
+  \vspace{2pt}\end{adjustwidth}\endMakeFramed%
+}
+
+\newenvironment{changemargin}[2]{\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{0pt}%
+\setlength{\rightmargin}{0pt}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{0pt plus 1pt}%
+\addtolength{\leftmargin}{#1}%
+\addtolength{\rightmargin}{#2}%
+}\item }{\end{list}}
+
+\usepackage{color}
+\usepackage{dsfont}
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[scaled]{helvet}
+\usepackage{inconsolata}
+
+
+\definecolor{colKeys}{rgb}{0,0,0.9} 
+\definecolor{colIdentifier}{rgb}{0,0,0} 
+\definecolor{colString}{rgb}{0.7,0,0} 
+\definecolor{colComments}{rgb}{0,0.6,0} 
+\usepackage{listings}
+\lstset{
+  stringstyle=\color{colString},
+  keywordstyle=\color{colKeys},
+  identifierstyle=\color{colIdentifier},
+  commentstyle=\color{colComments},
+  numbers=left,
+  tabsize=4,
+  frame=single,
+  breaklines=true,
+  basicstyle=\small\ttfamily,
+  numberstyle=\tiny\ttfamily,
+  framexleftmargin=0mm,
+  xleftmargin=7mm,
+  xrightmargin=7mm,
+  frameround={tttt},
+  captionpos=b
+}
+
+%% Headers and footers
+\usepackage{fancyhdr}
+\usepackage[section]{placeins}
+\pagestyle{fancy}
+\fancyhf{}
+\addtolength{\headwidth}{30pt}
+\addtolength{\headwidth}{30pt}
+\renewcommand{\headrulewidth}{0.4pt} % thickness of the header line
+\renewcommand{\footrulewidth}{0.4pt} % thickness of the footer line
+\renewcommand{\chaptermark}[1]{\markboth{#1}{#1}} % chapter name
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}  % section name
+\lhead[\fancyplain{}{\bf\thepage}]{\fancyplain{}{\bf\rightmark}} % display header
+\rhead[\fancyplain{}{\bf\leftmark}]{\fancyplain{}{}} % display header
+\fancyfoot[C]{\bf\thepage} % display footer (page number)
+\fancyfoot[R]{\bf\today} % display footer (date)
+\fancypagestyle{plain}{ 
+	\fancyhead{} \renewcommand{\headrulewidth}{0pt}
+}
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{plain}\cleardoublepage}}
+
+\usepackage[T1]{fontenc}
+\usepackage{enumerate}
+\usepackage{afterpage,lastpage,fancyhdr}
+\usepackage[includeheadfoot,margin=2.5cm]{geometry}
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+
+% -------------------- end of code stuff --------------------
+
+
+
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\makeatletter \def\thickhrulefill{\leavevmode \leaders \hrule height 1pt\hfill
+\kern \z@} \renewcommand{\maketitle}{
+    \begin{titlepage}
+    \let\footnotesize\small \let\footnoterule\relax \parindent \z@ \reset@font
+    \null\vfil
+    \vspace{-20mm}
+    \begin{center}
+    {\small \scshape Imperial College London}
+    \end{center}
+    \vspace{0.5cm}
+	\begin{minipage}{\textwidth}
+		\vspace{1cm}
+		%\noindent\rule[0ex]{\textwidth}{4pt} \\
+		%\flushright
+		\center
+		\@title
+		\\ \vspace{4mm}
+		%\noindent\rule[0ex]{\textwidth}{4pt} \\
+	\end{minipage}
+	\vspace{2cm}
+	\begin{center}
+		\includegraphics[width=70mm,]{logo_imperial_college_london.png}
+	\end{center}
+	\vspace{5.4cm}
+	\vspace{\stretch{1}}
+	\begin{minipage}{\textwidth}
+		\flushright
+		{\bfseries}
+		\vspace{7mm}
+		\center
+		\@author\\
+	\end{minipage}
+	\vspace{20mm}
+		\flushleft
+		{\bfseries}
+		{\small \scshape \@date }
+		\vspace{0.1cm}
+		\rule{\linewidth}{.5pt}
+  \end{titlepage}
+  \setcounter{footnote}{1}
+  \setcounter{page}{2}
+}
+
+
+\author{Paul Gribelyuk (pg1312, a5)}
+\makeatother
+\title{\Huge \#DOC417 - Advanced Computer Graphics Coursework 1}
+\date{\today}
+
+\begin{document}
+\maketitle
+% \tableofcontents
+\listoffigures
+\chapter{Generating HDR Images}
+\paragraph{}
+
+\paragraph{}
+
+% \begin{itemize}
+
+% \end{itemize}
+
+\begin{figure}[p]
+\begin{changemargin}{-50mm}{-50mm}
+\center
+\includegraphics[width=0.4\linewidth,height=0.8\textheight]{memorial_hdr.png}
+\caption{HDR Image before further processing}
+\end{changemargin}
+\end{figure}
+
+\begin{figure}[!h]
+\begin{changemargin}{-20mm}{-20mm}
+\center
+\includegraphics[scale=0.6]{memorial_hdr_stretched.png}
+\caption{HDR Image stretched over the entire range and brightened 50,000 times}
+\end{changemargin}
+\end{figure}
+\FloatBarrier
+
+\chapter{Implementing Image-Based Lighting}
+\paragraph{}
+
+
+\paragraph{}
+
+
+\end{document}  
