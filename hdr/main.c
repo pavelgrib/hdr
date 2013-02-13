@@ -60,17 +60,17 @@ int main(int count, char** argv) {
     
     char* grace_imgdir = "/Users/paul/Dropbox/Imperial/advanced-graphics/HW1/CO417-HW1/GraceCathedral/";
     char ibl_original[1024];
-    char iblPPM[1024];
-    char iblPFM[1024];
     concatenate(grace_imgdir, "grace_latlong.pfm", ibl_original);
     FP_IMG* relitImage = (FP_IMG*) malloc(sizeof(FP_IMG));
     generateRelitSphere(ibl_original, relitImage, 511, grace_imgdir);
-    concatenate(grace_imgdir, "grace_relit.pfm", iblPFM);
-    concatenate(grace_imgdir, "grace_relit.ppm", iblPPM);
     
+    char EMSpherePFM[1024];
+    char EMSpherePPM[1024];
+    concatenate(grace_imgdir, "latlong_em.pfm", EMSpherePFM);
+    concatenate(grace_imgdir, "latlong_em.ppm", EMSpherePPM);
+    WritePFM(EMSpherePFM, relitImage);
+    LoadPFMAndSaveClampedPPM(EMSpherePFM, EMSpherePPM, 1.0);
 //    printImageData((void*)relitImage->data, 511, 511, 3, 1);
-//    WritePFM(iblPFM, relitImage);
-//    LoadPFMAndSavePPM(iblPFM, iblPPM);
     
     printf("\n----------------------------- done --------------------------------\n\n");
 

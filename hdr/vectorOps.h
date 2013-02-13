@@ -23,4 +23,7 @@ void printImageData(const void* data, const int height, const int maxHeight, con
                     const int maxWidth, const int numChannels, const int channel);
 void printImage(const FP_IMG* image, const int maxHeight, const int maxWidth, const int channel);
 
+float arrayAverage(const float* array, const int length);
+void arrayStats(const float* array, const int length, float* avg, float* min, float* max, int numChannels);
+
 #endif

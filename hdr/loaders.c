@@ -97,11 +97,11 @@ void LoadPPMAndSavePFM(const char* image_in, const char* image_out) {
 	WritePFM(image_out, pfmImage);
 }
 
-void LoadPFMAndSavePPM(const char* image_in, const char* image_out) {
+void LoadPFMAndSaveClampedPPM(const char* image_in, const char* image_out, const float upperClamp) {
 	IMG* ppmImage = (IMG*) malloc(sizeof(IMG));
 	FP_IMG* pfmImage = (FP_IMG*) malloc(sizeof(FP_IMG));
 	unsigned int i, j, k, index;
-	
+	float dataPoint;
 	loadPFM(image_in, pfmImage);
 	ppmImage->data = (unsigned char*) malloc(sizeof(unsigned char) *
                                              pfmImage->width * pfmImage->height * pfmImage->numComponents);
@@ -121,7 +121,47 @@ void LoadPFMAndSavePPM(const char* image_in, const char* image_out) {
 		for ( j = 0 ; j < ppmImage->width ; ++j ) {
 			for ( k = 0 ; k < ppmImage->numComponents ; ++k ) {
 				index = (i * pfmImage->width + j) * pfmImage->numComponents + k;
-				ppmImage->data[index] = (unsigned char) (pfmImage->data[index]*255.0f); //R
+                dataPoint = pfmImage->data[index];
+                if ( dataPoint > upperClamp )
+                    ppmImage->data[index] = (unsigned char) upperClamp * 255.0f;
+                else
+                    ppmImage->data[index] = (unsigned char) dataPoint * 255.0f;
+			}
+		}
+	}
+	WritePNM(image_out, ppmImage);
+    cleanupFP(pfmImage);
+    cleanup(ppmImage);
+}
+
+void LoadPFMAndSavePPM(const char* image_in, const char* image_out) {
+	IMG* ppmImage = (IMG*) malloc(sizeof(IMG));
+	FP_IMG* pfmImage = (FP_IMG*) malloc(sizeof(FP_IMG));
+	unsigned int i, j, k, index;
+	float dataPoint, stretch, minPixel;
+	loadPFM(image_in, pfmImage);
+	ppmImage->data = (unsigned char*) malloc(sizeof(unsigned char) *
+                pfmImage->width * pfmImage->height * pfmImage->numComponents);
+	ppmImage->width = pfmImage->width;
+	ppmImage->height = pfmImage->height;
+	ppmImage->numComponents = pfmImage->numComponents;
+    ppmImage->avgVal = (float*)malloc(sizeof(float) * pfmImage->numComponents);
+    ppmImage->minVal = (float*)malloc(sizeof(float) * pfmImage->numComponents);
+    ppmImage->maxVal = (float*)malloc(sizeof(float) * pfmImage->numComponents);
+    
+    for ( k = 0; k < pfmImage->numComponents; ++k ) {
+        ppmImage->avgVal[k] = pfmImage->avgVal[k];
+        ppmImage->minVal[k] = pfmImage->minVal[k];
+        ppmImage->maxVal[k] = pfmImage->maxVal[k];
+    }
+	for ( i = 0 ; i < ppmImage->height ; ++i ) {
+		for ( j = 0 ; j < ppmImage->width ; ++j ) {
+			for ( k = 0 ; k < ppmImage->numComponents ; ++k ) {
+				index = (i * pfmImage->width + j) * pfmImage->numComponents + k;
+                dataPoint = pfmImage->data[index];
+                minPixel = pfmImage->minVal[k];
+                stretch = 255.0f / (pfmImage->maxVal[k] - pfmImage->minVal[k]);
+				ppmImage->data[index] = (unsigned char) ((dataPoint - minPixel) * stretch); //R
 //				ppmImage->data[index + 1] = (unsigned char) (pfmImage->data[index + 1]*255.0f);//G
 //				ppmImage->data[index + 2] = (unsigned char) (pfmImage->data[index + 2]*255.0f);//B
 //                if ( i == 255 && j == 255 ) {

@@ -16,6 +16,7 @@ void LoadAndSavePPM(const char* image_in, const char* image_out);
 void LoadAndSavePFM(const char *image_in, const char *image_out);
 void LoadPPMAndSavePFM(const char* image_in, const char* image_out);
 void LoadPFMAndSavePPM(const char* image_in, const char* image_out);
+void LoadPFMAndSaveClampedPPM(const char* image_in, const char* image_out, const float upperClamp);
 void analyzePPM(const char* imageToAnalyze);
 
 void cleanupFP(FP_IMG* fpImage);

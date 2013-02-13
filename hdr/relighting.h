@@ -21,10 +21,11 @@
 
 #define NUM_COMP 3
 #define DEBUG_IBL false
+#define DEBUG_IBL_DATA false
 
 void initSphere(float* sphere, const int radius);
 void generateReflectionMap(float* original, const int diameter);
-void shadeSphere(const char* image_in, FP_IMG* image);
+void shadeSphere(float* sphere, const int diameter, const FP_IMG* inputImage);
 
 void generateRelitSphere(const char* lightingFilename, FP_IMG* relitImage, const int diameter, const char* ibl_dir);
 
