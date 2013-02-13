@@ -86,13 +86,11 @@ void LoadPPMAndSavePFM(const char* image_in, const char* image_out) {
 	for ( i = 0 ; i < ppmImage->height ; ++i ) {
 		for ( j = 0 ; j < ppmImage->width ; ++j ) {
 			for ( k = 0 ; k < ppmImage->numComponents ; ++k ) {
-				index = i*ppmImage->width*ppmImage->numComponents +
-                j*ppmImage->numComponents + k; //index within the image
+				index = (i*ppmImage->width + j)*ppmImage->numComponents + k;
                 
-				//typecast 0 - 255 values to the 0.0f -> 1.0f range
 				pfmImage->data[index] = (float) (ppmImage->data[index])/255.0f; // R
-				pfmImage->data[index + 1] = (float) (ppmImage->data[index + 1])/255.0f; // G
-				pfmImage->data[index + 2] = (float) (ppmImage->data[index + 2])/255.0f; // B
+//				pfmImage->data[index + 1] = (float) (ppmImage->data[index + 1])/255.0f; // G
+//				pfmImage->data[index + 2] = (float) (ppmImage->data[index + 2])/255.0f; // B
 			}
 		}
 	}
@@ -122,12 +120,13 @@ void LoadPFMAndSavePPM(const char* image_in, const char* image_out) {
 	for ( i = 0 ; i < ppmImage->height ; ++i ) {
 		for ( j = 0 ; j < ppmImage->width ; ++j ) {
 			for ( k = 0 ; k < ppmImage->numComponents ; ++k ) {
-				index = i * pfmImage->width * pfmImage->numComponents
-                + j * pfmImage->numComponents + k; //index within the image
-				//typecast 0.0f -> 1.0f values to the 0 - 255 range
+				index = (i * pfmImage->width + j) * pfmImage->numComponents + k;
 				ppmImage->data[index] = (unsigned char) (pfmImage->data[index]*255.0f); //R
-				ppmImage->data[index + 1] = (unsigned char) (pfmImage->data[index + 1]*255.0f);//G
-				ppmImage->data[index + 2] = (unsigned char) (pfmImage->data[index + 2]*255.0f);//B
+//				ppmImage->data[index + 1] = (unsigned char) (pfmImage->data[index + 1]*255.0f);//G
+//				ppmImage->data[index + 2] = (unsigned char) (pfmImage->data[index + 2]*255.0f);//B
+//                if ( i == 255 && j == 255 ) {
+//                    printf("%d %f\n", ppmImage->data[index], pfmImage->data[index]);
+//                }
 			}
 		}
 	}

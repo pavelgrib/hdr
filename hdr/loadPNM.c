@@ -182,7 +182,6 @@ float* loadPFM( const char *filename, FP_IMG* image ) {
 //    printf("(min, avg, max) pixels: (%f, %f, %f)\n", minPixel[0], avgPixel[0], maxPixel[0]);
     free(tmpData);
     image->data = imageData;
-
     return imageData;
 }
 

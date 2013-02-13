@@ -54,3 +54,12 @@ void printImage(const FP_IMG* image, const int maxHeight, const int maxWidth, co
     printImageData(image->data, image->height, maxHeight,
                    image->width, maxWidth, image->numComponents, channel);
 }
+
+//float arrayMax(const float* array, const int length) {
+//    float maxVal = array[0];
+//    int i;
+//    for ( i = 0; i < length; ++i )
+//        maxVal = (array[i] > maxVal ? array[i] : ;);
+//    
+//    
+//}

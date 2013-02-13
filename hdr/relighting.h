@@ -20,7 +20,7 @@
 #include "vectorOps.h"
 
 #define NUM_COMP 3
-#define DEBUG_IBL true
+#define DEBUG_IBL false
 
 void initSphere(float* sphere, const int radius);
 void generateReflectionMap(float* original, const int diameter);

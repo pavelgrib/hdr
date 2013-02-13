@@ -20,7 +20,7 @@ void generateRelitSphere(const char* lightingFilename, FP_IMG* relitImage,
     FP_IMG* reflectanceImage = (FP_IMG*) malloc(sizeof(FP_IMG));
     generateReflectionMap(sphere, diameter);
     reflectanceImage->data = sphere;
-
+    
     if ( DEBUG_IBL ) printImageData(reflectanceImage->data, 511, 511, 20, 511, 3, 1);
     
     reflectanceImage->height = diameter;
@@ -31,6 +31,7 @@ void generateRelitSphere(const char* lightingFilename, FP_IMG* relitImage,
     concatenate(ibl_dir, "reflectance.pfm", reflectanceFilepathPFM);
     concatenate(ibl_dir, "reflectance.ppm", reflectanceFilepathPPM);
     WritePFM(reflectanceFilepathPFM, reflectanceImage);
+    
     LoadPFMAndSavePPM(reflectanceFilepathPFM, reflectanceFilepathPPM);
 
     // doing the re-lighting here
@@ -60,30 +61,69 @@ void initSphere(float* sphere, const int diameter) {
 
 void generateReflectionMap(float* original, const int diameter) {
     unsigned int i, j, k, idx;
-    float n[NUM_COMP], v[NUM_COMP], r[NUM_COMP];
-    float theta, phi; //, x, y, z;
+    float n[NUM_COMP], v[NUM_COMP], minVal[NUM_COMP], maxVal[NUM_COMP], r[NUM_COMP];
+    float theta, phi, x, y, z;
 //    printImageData(original, 127, height, 20, width, 3, 1);
     // assumption that v = [0, 0, 1]
-    v[0] = v[1] = 0;
-    v[2] = 1;
+    v[0] = v[1] = 0.0;
+    v[2] = 1.0;
+    minVal[0] = minVal[1] = minVal[2] = 1.0;
+    maxVal[0] = maxVal[1] = maxVal[2] = -1.0;
     for ( i = 0; i < diameter; ++i ) {
         for ( j = 0; j < diameter; ++j ) {
-            // need to calculate n as a function of i and j here
             idx = (i*diameter + j)*NUM_COMP;
-            if ( original[idx]!= 0 || original[idx+1]!=0 || original[idx+2]!=0 ) {
-                phi = linearTransform(j, 0, diameter, 0, PI);
-                theta = linearTransform(i, 0, diameter, -PI, PI);
-                n[0] = sin(theta) * sin(phi);
-                n[1] = cos(phi);
-                n[2] = sin(phi) * cos(theta);
-//                printImageData(n, 1, 3, 1, 1);
-                addVectors( scaleVector(n, NUM_COMP, 2*dotProduct(n, v, NUM_COMP)),
-                    scaleVector(v, NUM_COMP, -1.0), r, NUM_COMP );
+            x = 2.0*j/((float)(diameter-1)) - 1.0;
+            y = 1.0 - 2.0*i/((float)(diameter-1));
+            z = sqrt(1.0 - x*x - y*y);
+            if ( sqrt(x*x + y*y) <= 1.0 ) {
+                r[0] = r[1] = r[2] = 0.0;
+                theta = acos(y) / PI;
+                phi = (atan2( z, -x) + PI) / (2*PI);
+                n[0] = x;//sin(theta) * sin(phi);
+                n[1] = y;//cos(theta);
+                n[2] = z;//sin(theta) * cos(phi);
+                float ndotv = 0.0;
+                for ( int k = 0; k < NUM_COMP; ++k) ndotv += v[k]*n[k];
+
+                for ( int k = 0; k < NUM_COMP; ++k) r[k] = 2.0*ndotv*n[k] - v[k];
             
-                for ( k = 0; k < NUM_COMP; ++k )
-                    original[(i*diameter + j)*NUM_COMP + k] = r[k];
+                for ( k = 0; k < NUM_COMP; ++k ) {
+                    original[idx + k] = r[k];
+                    if ( r[k] < minVal[k] ) minVal[k] = r[k];
+                    if ( r[k] > maxVal[k] ) maxVal[k] = r[k];
+                }
+                if ( DEBUG_IBL ) {
+                    if ( i == 255 && j == 255 ) {
+                        printf("%f %f %f vs %f %f %f\n", n[0], n[1], n[2], r[0], r[1], r[2]);
+                    }
+                }
             }
         }
+    }
+
+    // making it fit on the 0 to 1 range
+    for ( i = 0; i < diameter; ++i ) {
+        for ( j = 0; j < diameter; ++j ) {
+            for ( k = 0; k < NUM_COMP; ++k ) {
+                x = 2.0*j/((float)(diameter-1)) - 1.0;
+                y = 1.0 - 2.0*i/((float)(diameter-1));
+                if (sqrt(x*x + y*y) <= 1.0 ) {
+                    idx = (i*diameter + j)*NUM_COMP + k;
+                    original[idx] = (original[idx] - minVal[k])/(maxVal[k] - minVal[k]);
+                }
+            }
+        }
+    }
+
+    if ( DEBUG_IBL ) {
+        int outsideRange = 0;
+        for ( i = 0; i < diameter*diameter*NUM_COMP; ++i ) {
+            outsideRange += (original[i]<0);
+        }
+        printf("pixels outside of range: %d\n", outsideRange);
+
+        printImageData(minVal, 1, 1, NUM_COMP, NUM_COMP, 0, 0);
+        printImageData(maxVal, 1, 1, NUM_COMP, NUM_COMP, 0, 0);
     }
 }
 
@@ -97,4 +137,3 @@ float linearTransform(const float location, const float fromOld,
 void shadeSphere(const char* image_in, FP_IMG* image) {
     
 }
-
