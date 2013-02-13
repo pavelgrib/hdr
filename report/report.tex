@@ -160,35 +160,101 @@
 \listoffigures
 \chapter{Generating HDR Images}
 \paragraph{}
-
+This part asked to produce an HDR image with the 7 included low-dynamic-range files according to the following formula:
+$$
+f(x,y) = \exp\left\{\frac{\sum_i w(Z_i(x,y))\log\left(\frac{Z_i(x,y)}{\Delta t_i}\right)}{\sum_i w(Z_i(x,y)}\right\}
+$$
 \paragraph{}
-
-% \begin{itemize}
-
-% \end{itemize}
-
-\begin{figure}[p]
+Since we assumed a linear response function $f$, we are able to use this simplifying assumption in the calculation.  The assignment asked to implement a re-weighting function which has the effect of giving greater weight to pixels of images with a middle-of-the-range value.  The one I used was:
+$$
+w(z) = \frac{1}{2} + \frac{1}{2}\cdot\sin\left(2\pi\left(z - \frac{1}{4})\right)\right)
+$$
+ Since the relative exposure is inversely proportional to the intensity of the pixel being computed, this has the effect of dampening the end-result to a very dark exposure, seen here:
+\begin{figure}[!h]
 \begin{changemargin}{-50mm}{-50mm}
 \center
-\includegraphics[width=0.4\linewidth,height=0.8\textheight]{memorial_hdr.png}
+\includegraphics[scale=0.3]{memorial_hdr.png}
 \caption{HDR Image before further processing}
 \end{changemargin}
 \end{figure}
 
+To fix this, I stretched the pixel values so that the minimum (overall, not per channel) value was at zero and the maximum was at one and applied a 5000 brightness scaling (keeping maximum at 1).  This is seen here:
 \begin{figure}[!h]
-\begin{changemargin}{-20mm}{-20mm}
+\begin{changemargin}{-50mm}{-50mm}
 \center
-\includegraphics[scale=0.6]{memorial_hdr_stretched.png}
-\caption{HDR Image stretched over the entire range and brightened 50,000 times}
+\includegraphics[scale=0.35]{memorial_hdr_stretched.png}
+\caption{HDR Image after tone mapping and brightening}
 \end{changemargin}
 \end{figure}
+
+I also applied a few different gamma settings to make the image friendlier to the human eye:
+\begin{figure}[!h]
+\begin{changemargin}{-50mm}{-50mm}
+\center
+\includegraphics[scale=0.35]{memorial_gamma_18.png}
+\caption{HDR Image with Gamma adjustment of 1.8}
+\end{changemargin}
+\end{figure}
+
+\begin{figure}[!h]
+\begin{changemargin}{-50mm}{-50mm}
+\center
+\includegraphics[scale=0.35]{memorial_gamma_22.png}
+\caption{HDR Image with Gamma adjustment of 2.2}
+\end{changemargin}
+\end{figure}
+
+\begin{figure}[!h]
+\begin{changemargin}{-50mm}{-50mm}
+\center
+\includegraphics[scale=0.35]{memorial_gamma_25.png}
+\caption{HDR Image with Gamma adjustment of 2.5}
+\end{changemargin}
+\end{figure}
+
+Although it is pretty clear that 2.2 is the optimal gamma adjustment, and has been widely applied in graphics software in industry, the Mac OS X operating system used a gamma of 1.8 up until the 10.6 version release in 2009.  I also noticed that different brightness adjustments (stops) were better with different gamma settings, i.e. a higher gamma allowed for a lower brightness adjustment, and vice versa, although at extremes, this relationship produced bad images, highlighting the tradeoff between these two settings.
+
 \FloatBarrier
 
 \chapter{Implementing Image-Based Lighting}
 \paragraph{}
+This part of the assignment asked to first visualize the reflectance vectors on a sphere in a 511 by 511 image, with the three different channels representing the three coordinates.  The general reflectance formula is:
+$$
+\mathbf{r} = 2(\mathbf{n}\cdot\mathbf{v})\mathbf{n} - \mathbf{v}
+$$
+with the normal $\mathbf{n}$ being defined as:
+\begin{eqnarray}
+x = \frac{2j}{d} - 1\\
+y = 1 - \frac{2i}{d} \\
+z = \sqrt{1 - x^2 - y^2}
+\end{eqnarray}
+with $i$ and $j$ representing the height and width pixel indices, respectively, and $d$ being the number of pixels for the length of the diameter of the sphere being constructed.
+
+Thus, since, Blue is the third channel, it should appear close to the center of the sphere, since, there, rays are being reflected back at the camera, in the positive $z$ direction.  Indeed, we see this relationship in the image below:
+\begin{figure}[!h]
+\begin{changemargin}{-50mm}{-50mm}
+\center
+\includegraphics[scale=0.5]{reflectance_map.png}
+\caption{Reflection Map on a Sphere}
+\end{changemargin}
+\end{figure}
+
+\paragraph{}
+The next, and last part of the assignment is to map a lat-long map of a scene onto a mirrored ball.  For this, it is beneficial to use the reflectance vectors already consructed in the previous part of the assignment, and to transform them to polar coordinates $(\theta, \phi)$ (since radius is one) with the following formulae:
+\begin{eqnarray}
+\theta &=& \arccos(r[1]) \\
+\phi &=& \arctan\left(\frac{r[0]}{r[2]}\right)\\
+\end{eqnarray}
+These variables represent where on the lat-long map the pixel is to be found corresponding to the ray $\mathbf{r}$ and its unique point on the sphere.  Unfortunately, my code had a small mistake I could not find, but the result is here:
+\begin{figure}[!h]
+\begin{changemargin}{-50mm}{-50mm}
+\center
+\includegraphics[scale=0.4]{grace_sphere.png}
+\caption{Mapping the Grace Cathedral Lat-Long Environment Map onto a Sphere}
+\end{changemargin}
+\end{figure}
 
 
 \paragraph{}
-
-
+In conclusion, I have written everything in C, code is available upon demand, and the corresponding PFM images are included in the zip file.
 \end{document}  
