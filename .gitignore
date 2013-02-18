@@ -4,7 +4,6 @@
 *.ppm
 *.pfm
 .DS_Store
-project.pbxproj
 contents.xcworkspacedata
 UserInterfaceState.xcuserstate
 Breakpoints.xcbkptlist
