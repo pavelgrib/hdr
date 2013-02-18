@@ -10,9 +10,10 @@ Year: 2013
 #include "loaders.h"
 #include "relighting.h"
 #include "vectorOps.h"
+#include "image_sampling.h"
 
 int main(int count, char** argv) {
-
+    unsigned int i;
     // all for CW1
 //    printf("----------------------------- HDR ----------------------------------\n\n");
 //	char* imgdir = "/Users/paul/Dropbox/Imperial/advanced-graphics/HW1/CO417-HW1/Memorial/";
@@ -77,26 +78,36 @@ int main(int count, char** argv) {
 
     
     // all for CW2
+    char* graceEMPath = "/Users/paul/Dropbox/Imperial/advanced-graphics/GraceCathedral/grace_latlong.pfm";
+    FP_IMG* grace_em = (FP_IMG*) malloc(sizeof(FP_IMG));
+    FP_IMG* cdf_sampled = (FP_IMG*) malloc(sizeof(FP_IMG));
+    FP_IMG* phong_sampled = (FP_IMG*) malloc(sizeof(FP_IMG));
+    int nums[] = {64, 256, 1024};
+    for ( i = 0; i < 3; ++i ) {
+        resetIMG(cdf_sampled);
+        loadPFM(graceEMPath, grace_em);
+        generateCDFSamples(grace_em, cdf_sampled, nums[i]);
+        generatePhongSamples(grace_em, phong_sampled, nums[i]);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -293,3 +293,17 @@ void cleanup(IMG* image) {
     free(image->avgVal);
     free(image);
 }
+
+void resetIMG(FP_IMG* image) {
+    unsigned int i;
+    
+    for ( i = 0; i < image->height*image->width*image->numComponents; ++i ) {
+        image->data[i] = 0;
+    }
+    
+    for ( i = 0; i < image->numComponents; ++i ) {
+        image->avgVal[i] = 0.0;
+        image->minVal[i] = 0.0;
+        image->maxVal[i] = 0.0;
+    }
+}
