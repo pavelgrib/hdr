@@ -19,7 +19,6 @@ void generateCDFSamples(const FP_IMG* emImage, FP_IMG* sampledImage, const int n
     sampledImage->minVal = (float*) malloc(sizeof(float) * numComponents);
     sampledImage->maxVal = (float*) malloc(sizeof(float) * numComponents);
     sampledImage->avgVal = (float*) malloc(sizeof(float) * numComponents);
-    printf("%ld\n", sizeof(float)*numComponents*height*width);
     memcpy(sampledImage->data, emImage->data, sizeof(float)*height*width*numComponents);
     memcpy(sampledImage->avgVal, emImage->avgVal, sizeof(float)*numComponents);
     memcpy(sampledImage->minVal, emImage->minVal, sizeof(float)*numComponents);
@@ -27,8 +26,6 @@ void generateCDFSamples(const FP_IMG* emImage, FP_IMG* sampledImage, const int n
     sampledImage->height = height;
     sampledImage->width = width;
     sampledImage->numComponents = numComponents;
-    
-
     
     // first get luminance values for image:
     float* luminance = calculateLuminance(emImage);

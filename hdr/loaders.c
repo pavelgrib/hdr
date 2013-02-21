@@ -141,10 +141,6 @@ void LoadPFMAndSavePPM(const char* image_in, const char* image_out) {
 	float dataPoint, stretch, minPixel;
 	loadPFM(image_in, pfmImage);
     
-//    printf("avg: %f %f %f\n", pfmImage->avgVal[0], pfmImage->avgVal[1], pfmImage->avgVal[2]);
-//    printf("min: %f %f %f\n", pfmImage->minVal[0], pfmImage->minVal[1], pfmImage->minVal[2]);
-//    printf("max: %f %f %f\n", pfmImage->maxVal[0], pfmImage->maxVal[1], pfmImage->maxVal[2]);
-    
 	ppmImage->data = (unsigned char*) malloc(sizeof(unsigned char) *
                 pfmImage->width * pfmImage->height * pfmImage->numComponents);
 	ppmImage->width = pfmImage->width;
@@ -166,7 +162,7 @@ void LoadPFMAndSavePPM(const char* image_in, const char* image_out) {
                 dataPoint = pfmImage->data[index];
                 minPixel = pfmImage->minVal[k];
                 stretch = 255.0f;
-				ppmImage->data[index] = (unsigned char) ((dataPoint - minPixel) * stretch); //R
+				ppmImage->data[index] = (unsigned char) (dataPoint * stretch);
 //				ppmImage->data[index + 1] = (unsigned char) (pfmImage->data[index + 1]*255.0f);//G
 //				ppmImage->data[index + 2] = (unsigned char) (pfmImage->data[index + 2]*255.0f);//B
 //                if ( i == 255 && j == 255 ) {
