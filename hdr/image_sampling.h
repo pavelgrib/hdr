@@ -21,12 +21,7 @@ void generateCDFSamples(const FP_IMG* emImage, FP_IMG* sampledImage, const int n
 void generatePhongSamples(const FP_IMG* emImage, FP_IMG* sampledImage, const int numSamples);
 
 // preprocessing image to get average of RGB channels at each pixel
-// allocates memory for sizeof(float) * height * width on heap; returns the pointer
+// allocates memory for sizeof(float) * height * width on heap and returns pointer to it
 float* calculateLuminance(const FP_IMG* img);
-
-float* calculate2DCDF(const float* img,
-                      const int height,
-                      const int width,
-                      const int nBuckets);
 
 #endif

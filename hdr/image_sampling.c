@@ -40,18 +40,3 @@ float* calculateLuminance(const FP_IMG* img) {
     }
     return luminance;
 }
-
-float* calculate2DCDF(const float* img, const int height,
-                      const int width,
-                      const int nBuckets )
-{
-    unsigned int i, j;
-    float* avgInScanLine = (float*) calloc(sizeof(float), height);
-    
-    for ( i = 0; i < height; ++i ) {
-        for ( j = 0; j < width; ++j ) {
-            avgInScanLine[i] += (img[i*height + j] - avgInScanLine[i]) / (i+1);
-        }
-    }
-    
-}

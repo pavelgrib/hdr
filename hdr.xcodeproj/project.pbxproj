@@ -15,8 +15,6 @@
 		DA33AFAF16C89075004D9D5A /* relighting.c in Sources */ = {isa = PBXBuildFile; fileRef = DA33AFAE16C89075004D9D5A /* relighting.c */; };
 		DA783A6F16CA7DD0006E70E8 /* vectorOps.c in Sources */ = {isa = PBXBuildFile; fileRef = DA783A6D16CA7DD0006E70E8 /* vectorOps.c */; };
 		DA921F3516D1C1310015F265 /* image_sampling.c in Sources */ = {isa = PBXBuildFile; fileRef = DA921F3416D1C1310015F265 /* image_sampling.c */; };
-		DA921F3D16D2F6C60015F265 /* createHDR.c in Sources */ = {isa = PBXBuildFile; fileRef = DA921F3C16D2F6C60015F265 /* createHDR.c */; };
-		DA921F3F16D2F6C60015F265 /* CreateHDR.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA921F3E16D2F6C60015F265 /* CreateHDR.1 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,16 +25,6 @@
 			dstSubfolderSpec = 0;
 			files = (
 				DA33AF9316C710C7004D9D5A /* hdr.1 in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-		DA921F3816D2F6C60015F265 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-				DA921F3F16D2F6C60015F265 /* CreateHDR.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -62,20 +50,10 @@
 		DA783A6E16CA7DD0006E70E8 /* vectorOps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vectorOps.h; sourceTree = "<group>"; };
 		DA921F3316D1C0610015F265 /* image_sampling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image_sampling.h; sourceTree = "<group>"; };
 		DA921F3416D1C1310015F265 /* image_sampling.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = image_sampling.c; sourceTree = "<group>"; };
-		DA921F3A16D2F6C60015F265 /* CreateHDR */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CreateHDR; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA921F3C16D2F6C60015F265 /* createHDR.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = createHDR.c; sourceTree = "<group>"; };
-		DA921F3E16D2F6C60015F265 /* CreateHDR.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CreateHDR.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		DA33AF8A16C710C7004D9D5A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DA921F3716D2F6C60015F265 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -89,7 +67,6 @@
 			isa = PBXGroup;
 			children = (
 				DA33AF8F16C710C7004D9D5A /* hdr */,
-				DA921F3B16D2F6C60015F265 /* CreateHDR */,
 				DA33AF8E16C710C7004D9D5A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -98,7 +75,6 @@
 			isa = PBXGroup;
 			children = (
 				DA33AF8D16C710C7004D9D5A /* hdr */,
-				DA921F3A16D2F6C60015F265 /* CreateHDR */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -160,15 +136,6 @@
 			name = Scripts;
 			sourceTree = "<group>";
 		};
-		DA921F3B16D2F6C60015F265 /* CreateHDR */ = {
-			isa = PBXGroup;
-			children = (
-				DA921F3C16D2F6C60015F265 /* createHDR.c */,
-				DA921F3E16D2F6C60015F265 /* CreateHDR.1 */,
-			);
-			path = CreateHDR;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -187,23 +154,6 @@
 			name = hdr;
 			productName = hdr;
 			productReference = DA33AF8D16C710C7004D9D5A /* hdr */;
-			productType = "com.apple.product-type.tool";
-		};
-		DA921F3916D2F6C60015F265 /* CreateHDR */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DA921F4016D2F6C60015F265 /* Build configuration list for PBXNativeTarget "CreateHDR" */;
-			buildPhases = (
-				DA921F3616D2F6C60015F265 /* Sources */,
-				DA921F3716D2F6C60015F265 /* Frameworks */,
-				DA921F3816D2F6C60015F265 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = CreateHDR;
-			productName = CreateHDR;
-			productReference = DA921F3A16D2F6C60015F265 /* CreateHDR */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -228,7 +178,6 @@
 			projectRoot = "";
 			targets = (
 				DA33AF8C16C710C7004D9D5A /* hdr */,
-				DA921F3916D2F6C60015F265 /* CreateHDR */,
 			);
 		};
 /* End PBXProject section */
@@ -245,14 +194,6 @@
 				DA33AFAF16C89075004D9D5A /* relighting.c in Sources */,
 				DA783A6F16CA7DD0006E70E8 /* vectorOps.c in Sources */,
 				DA921F3516D1C1310015F265 /* image_sampling.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DA921F3616D2F6C60015F265 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DA921F3D16D2F6C60015F265 /* createHDR.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,21 +277,6 @@
 			};
 			name = Release;
 		};
-		DA921F4116D2F6C60015F265 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		DA921F4216D2F6C60015F265 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -371,14 +297,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		DA921F4016D2F6C60015F265 /* Build configuration list for PBXNativeTarget "CreateHDR" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DA921F4116D2F6C60015F265 /* Debug */,
-				DA921F4216D2F6C60015F265 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
