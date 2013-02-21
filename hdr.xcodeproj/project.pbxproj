@@ -31,6 +31,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DA0F9FB716D59A8100B30C52 /* Pixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pixel.h; sourceTree = "<group>"; };
 		DA33AF8D16C710C7004D9D5A /* hdr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hdr; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA33AF9216C710C7004D9D5A /* hdr.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hdr.1; sourceTree = "<group>"; };
 		DA33AF9916C71126004D9D5A /* full_round.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = full_round.sh; sourceTree = "<group>"; };
@@ -98,6 +99,7 @@
 			children = (
 				DA921F3316D1C0610015F265 /* image_sampling.h */,
 				DA921F3416D1C1310015F265 /* image_sampling.c */,
+				DA0F9FB716D59A8100B30C52 /* Pixel.h */,
 			);
 			name = EM_Sampling;
 			sourceTree = "<group>";
@@ -265,7 +267,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -273,7 +277,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
