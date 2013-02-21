@@ -21,5 +21,6 @@ void analyzePPM(const char* imageToAnalyze);
 
 void cleanupFP(FP_IMG* fpImage);
 void cleanup(IMG* image);
+void resetIMG(FP_IMG* image);
 
 #endif
