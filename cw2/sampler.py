@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 import PIL.Image as Image
 import math, sys, functools
 import matplotlib.pyplot as plt
@@ -33,10 +35,8 @@ class FPSampler:
 		f.write('FP\0x0a\0x0a')
 		f.write(str(self.npData.shape[0]) + ' ' + str(self.npData.shape[1]) + '\0x0a')
 		f.write('-1.0\0x0a')
-		# rev = self.npData[::-1]
-		# rev.tofile(f)
-		# for i in np.arange(self.npData.shape[0]-1, 0, -1):
-		# 	self.npData[i,:,:].tofile(f)
+		rev = self.npData[::-1].astype(np.float32)
+		rev.tofile(f)
 		f.flush()
 		f.close()
 
@@ -92,6 +92,11 @@ class FPSampler:
 		f = np.vectorize(upTo255)
 		return f(pfmData)
 
+	def imageValues(samples):
+		values = list(len(samples))
+		for i, sample in enumerate(samples):
+			values[i] = self.npData[sample[0], sample[1]]
+
 if __name__ == '__main__':
 	gracedir = '/Users/paul/Dropbox/Imperial/advanced-graphics/GraceCathedral/'
 	workingdir = '/Users/paul/github/hdr/cw2/'
@@ -102,7 +107,6 @@ if __name__ == '__main__':
 		mc_ppm = sampler.toPPM(mc_sampled_image)
 		sampler.writePFMFile(workingdir + 'grace_cdf' + str(i) + '.pfm', mc_sampled_image)
 		img = Image.fromarray(np.uint8(mc_ppm))
-		# img.show()
 		img.save('grace_cdf_' + str(i) + '.ppm')
 		for j in [1, 10, 50, 200]:
 			phong_samples = sampler.phongSamples(i, j)
@@ -110,5 +114,4 @@ if __name__ == '__main__':
 			phong_ppm = sampler.toPPM(phong_sampled_image)
 			sampler.writePFMFile(workingdir + 'phong_' + str(i) + '_' + str(j) + '.pfm', phong_sampled_image)
 			img = Image.fromarray(np.uint8(phong_ppm))
-			# img.show()
 			img.save('grace_phong_' + str(i) + '_' + str(j) + '.ppm')

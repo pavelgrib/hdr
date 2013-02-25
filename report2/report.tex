@@ -197,87 +197,73 @@ The graph associated with $R_p$ and $R_s$ for light leaving a dielectric with $\
 \end{figure}
 The Brewster angle, was computed to be the point where $R_p = 0$, was calculated from the plotted data to be $0.981158$ radians (56.22 degrees).  The exact value calculated from the formula $\theta_B = \arctan\left(\frac{\eta_t}{\eta_i}\right)$ is $0.981443$ radians (56.23 degrees).  The critical angle was calculated directly from the formula, $\theta_C = \arcsin\left(\frac{\eta_t}{\eta_i}\right)$, to be $0.729728$ (41.81 degrees).
 
-\chapter{Sampling an Environment Map Using Cumulative Density Functions}
-In this section I used the 2D cumulative density function (CDF) to sample the Grace Cathedral environment map (EM).
-% $$
-% f(x,y) = \exp\left\{\frac{\sum_i w(Z_i(x,y))\log\left(\frac{Z_i(x,y)}{\Delta t_i}\right)}{\sum_i w(Z_i(x,y)}\right\}
-% $$
-% \paragraph{}
-% Since we assumed a linear response function $f$, we are able to use this simplifying assumption in the calculation.  The assignment asked to implement a re-weighting function which has the effect of giving greater weight to pixels of images with a middle-of-the-range value.  The one I used was:
-% $$
-% w(z) = \frac{1}{2} + \frac{1}{2}\cdot\sin\left(2\pi\left(z - \frac{1}{4})\right)\right)
-% $$
-%  Since the relative exposure is inversely proportional to the intensity of the pixel being computed, this has the effect of dampening the end-result to a very dark exposure, seen here:
-% \begin{figure}[!h]
-% \begin{changemargin}{-50mm}{-50mm}
-% \center
-% \includegraphics[scale=0.3]{memorial_hdr.png}
-% \caption{HDR Image before further processing}
-% \end{changemargin}
-% \end{figure}
+\chapter{Sampling an Environment Map}
+In this section I sample the Grace Cathedral environment map (EM) using the cumulative density function (CDF) as well as the analytical Phong model.
+\section{Monte Carlo Sampling using CDF Inversion}
+This method assumes that the luminance of the pixels forms a 2D probability density from which we can sample.  The approach is as follows:
+\begin{itemize}
+  \item[1] Compute average luminance in each row of the image forming a 1D probability density, \verb+rowAverages+
+  \item[2] Perform CDF inversion on 1D array
+  \begin{itemize}
+    \item[a] Calculate $CDF(i) = ( \sum_{j=0}^{i-1} array[j] ) / (\sum_{j=0}^{len(array)} array[j])$ and $CDF(0) = 0$
+    \item[b] Draw random variate $\xi$
+    \item[c] Find index $k$ such that $CDF[k] \geq \xi$ and $CDF[k-1] < \xi$ via binomial search, since $CDF$ is sorted
+    \item[d] $k$ is the sample according to the 1D PDF represented by the input array
+  \end{itemize}
+  \item[3] Perform the same 1D sampling on the selected row represented by $k$, to get another index $l$
+  \item[4] The pair $(k, l)$ represent the index values of a CDF-based sample of the 2D image
+\end{itemize}
 
-% To fix this, I stretched the pixel values so that the minimum (overall, not per channel) value was at zero and the maximum was at one and applied a 5000 brightness scaling (keeping maximum at 1).  This is seen here:
+I applied this technique on the Grace Cathedral environment map, with images, displayed in Figures \ref{fig:grace_cdf_64}, \ref{fig:grace_cdf_256}, \ref{fig:grace_cdf_1024}
 
+\begin{figure}[!h]
+  \begin{changemargin}{-50mm}{-50mm}
+    \center
+    \includegraphics[scale=0.4]{grace_cdf_64.png}
+    \caption{Grace Cathedral sampled via CDF Inversion with 64 samples \label{fig:grace_cdf_64}}
+  \end{changemargin}
+\end{figure}
 
-% \begin{figure}[!h]
-% \begin{changemargin}{-50mm}{-50mm}
-% \center
-% \includegraphics[scale=0.35]{memorial_gamma_22.png}
-% \caption{HDR Image with Gamma adjustment of 2.2}
-% \end{changemargin}
-% \end{figure}
+\begin{figure}[!h]
+  \begin{changemargin}{-50mm}{-50mm}
+    \center
+    \includegraphics[scale=0.4]{grace_cdf_64.png}
+    \caption{Grace Cathedral sampled via CDF Inversion with 256 samples \label{fig:grace_cdf_256}}
+  \end{changemargin}
+\end{figure}
 
-% \begin{figure}[!h]
-% \begin{changemargin}{-50mm}{-50mm}
-% \center
-% \includegraphics[scale=0.35]{memorial_gamma_25.png}
-% \caption{HDR Image with Gamma adjustment of 2.5}
-% \end{changemargin}
-% \end{figure}
+\begin{figure}[!h]
+  \begin{changemargin}{-50mm}{-50mm}
+    \center
+    \includegraphics[scale=0.4]{grace_cdf_1024.png}
+    \caption{Grace Cathedral sampled via CDF Inversion with 1024 samples \label{fig:grace_cdf_1024}}
+  \end{changemargin}
+\end{figure}
 
-% Although it is pretty clear that 2.2 is the optimal gamma adjustment, and has been widely applied in graphics software in industry, the Mac OS X operating system used a gamma of 1.8 up until the 10.6 version release in 2009.  I also noticed that different brightness adjustments (stops) were better with different gamma settings, i.e. a higher gamma allowed for a lower brightness adjustment, and vice versa, although at extremes, this relationship produced bad images, highlighting the tradeoff between these two settings.
+\section{Phong Lobe Sampling}
+The Phong sampling technique is an analytical procedure, not relying on the input image data.  The formulation is as follows (exponent $n$ is an input):
+\begin{itemize}
+  \item[1] Draw uniform random variates $\xi_1$ and $\xi_2$
+  \item[2] The corresponding sampled angular values are $(\theta, \phi) = \left(\cos^{-1}\left\{(1 - \xi_1)^{\frac{1}{n+1}}\right\}, 2\pi\xi_2\right)$
+  \item[3] The corresponding indices in the latlong map are $(k, l) = \left(\frac{2\theta}{\pi} \cdot H, \frac{\phi}{2\pi} \cdot W\right)$
+\end{itemize}
+The images resulting from the application of this tecnique are in Figures \ref{fig:phong_256_10} and \ref{fig:phong_1024_50}.
+\begin{figure}[!h]
+  \begin{changemargin}{-50mm}{-50mm}
+    \center
+    \includegraphics[scale=0.4]{grace_phong_256_10.png}
+    \caption{Grace Cathedral sampled via Phong with 256 samples and $n=5$ \label{fig:phong_256_10}}
+  \end{changemargin}
+\end{figure}
 
-% \FloatBarrier
-
-% \chapter{Implementing Image-Based Lighting}
-% \paragraph{}
-% This part of the assignment asked to first visualize the reflectance vectors on a sphere in a 511 by 511 image, with the three different channels representing the three coordinates.  The general reflectance formula is:
-% $$
-% \mathbf{r} = 2(\mathbf{n}\cdot\mathbf{v})\mathbf{n} - \mathbf{v}
-% $$
-% with the normal $\mathbf{n}$ being defined as:
-% \begin{eqnarray}
-% x = \frac{2j}{d} - 1\\
-% y = 1 - \frac{2i}{d} \\
-% z = \sqrt{1 - x^2 - y^2}
-% \end{eqnarray}
-% with $i$ and $j$ representing the height and width pixel indices, respectively, and $d$ being the number of pixels for the length of the diameter of the sphere being constructed.
-
-% Thus, since, Blue is the third channel, it should appear close to the center of the sphere, since, there, rays are being reflected back at the camera, in the positive $z$ direction.  Indeed, we see this relationship in the image below:
-% \begin{figure}[!h]
-% \begin{changemargin}{-50mm}{-50mm}
-% \center
-% \includegraphics[scale=0.5]{reflectance_map.png}
-% \caption{Reflection Map on a Sphere}
-% \end{changemargin}
-% \end{figure}
-
-% \paragraph{}
-% The next, and last part of the assignment is to map a lat-long map of a scene onto a mirrored ball.  For this, it is beneficial to use the reflectance vectors already consructed in the previous part of the assignment, and to transform them to polar coordinates $(\theta, \phi)$ (since radius is one) with the following formulae:
-% \begin{eqnarray}
-% \theta &=& \arccos(r[1]) \\
-% \phi &=& \arctan\left(\frac{r[0]}{r[2]}\right)\\
-% \end{eqnarray}
-% These variables represent where on the lat-long map the pixel is to be found corresponding to the ray $\mathbf{r}$ and its unique point on the sphere.  Unfortunately, my code had a small mistake I could not find, but the result is here:
-% \begin{figure}[!h]
-% \begin{changemargin}{-50mm}{-50mm}
-% \center
-% \includegraphics[scale=0.4]{grace_sphere.png}
-% \caption{Mapping the Grace Cathedral Lat-Long Environment Map onto a Sphere}
-% \end{changemargin}
-% \end{figure}
+\begin{figure}[!h]
+  \begin{changemargin}{-50mm}{-50mm}
+    \center
+    \includegraphics[scale=0.4]{grace_phong_1024_50.png}
+    \caption{Grace Cathedral sampled via Phong with 1024 samples and $n=50$ \label{fig:phong_1024_50}}
+  \end{changemargin}
+\end{figure}
 
 
-% \paragraph{}
-% In conclusion, I have written everything in C, code is available upon demand, and the corresponding PFM images are included in the zip file.
+
 \end{document}  

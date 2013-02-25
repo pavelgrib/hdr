@@ -1,3 +1,9 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Light entering a dielectric medium }}{4}
 \contentsline {figure}{\numberline {1.2}{\ignorespaces Light leaving a dielectric medium }}{4}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Grace Cathedral sampled via CDF Inversion with 64 samples }}{6}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Grace Cathedral sampled via CDF Inversion with 256 samples }}{6}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Grace Cathedral sampled via CDF Inversion with 1024 samples }}{7}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Grace Cathedral sampled via Phong with 256 samples and $n=5$ }}{8}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Grace Cathedral sampled via Phong with 1024 samples and $n=50$ }}{9}
