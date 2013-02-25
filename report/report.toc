@@ -1,6 +1,0 @@
-\contentsline {chapter}{\numberline {1}Generating HDR Images}{4}
-\contentsline {paragraph}{}{4}
-\contentsline {paragraph}{}{4}
-\contentsline {chapter}{\numberline {2}Implementing Image-Based Lighting}{7}
-\contentsline {paragraph}{}{7}
-\contentsline {paragraph}{}{7}
