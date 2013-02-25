@@ -264,6 +264,40 @@ The images resulting from the application of this tecnique are in Figures \ref{f
   \end{changemargin}
 \end{figure}
 
+\chapter{Rendering a Sphere with EM Samples}
+To render a sphere with samples drawn via CDF inversion from an environment map, we first assume that the BRDF associated with the sphere is diffuse, thus simplifying the integral equation at each point on the sphere to:
+$$
+L_{r, N} (\omega_r) = \frac{\int_{\Omega} L_i (\omega_i) d\omega_i}{N}\cdot \sum_{j=1}^N \frac{1}{\pi} \cos(\theta_{i,j}) NormColor_i
+$$
+where $d\omega_i = sin\theta d\theta d\phi$ is the solid angle, and $NormColor$ is the normalized pixel 3-vector at the sample $j$.
 
+First, I pre-computed the intergral $\int_{\Omega} L_i (\omega_i) d\omega_i$:
+\begin{lstlisting}[ ]
+def precomputeIntegral(self, imageData):
+    self.integral = 0.0
+    luminance = np.average(imageData, axis=2)
+    d_theta = math.pi / float(luminance.shape[0])
+    d_phi = 2*math.pi / float(luminance.shape[1])
+    for idx, v in np.ndenumerate(luminance):
+      theta = d_theta * idx[0]
+      d_omega = math.sin(theta) * d_theta * d_phi
+      self.integral += v * d_omega
+\end{lstlisting}
+Next, I need to compute the sum at each point on the sphere:
+\begin{lstlisting}[ ]
+def monteCarloSum(self, sampleValues, spherePixel):
+    self.mcSum = 0.0
+    theta = spherePoint[0] * 2 * math.pi / (self.diameter + 1)
+    for s in sampleValues:
+      self.mcSum += cos(theta) * (s / norm(s)) / math.pi
+\end{lstlisting}
+Finally, I can combine these two calculations, along with a spherical to Eucliean projection, to produce pixel values.
+\begin{figure}[!h]
+  \begin{changemargin}{-50mm}{-50mm}
+    \center
+    \includegraphics[scale=1]{sampled_sphere.png}
+    \caption{Mapping of MC Samples onto Sphere \label{fig:sampled_sphere}}
+  \end{changemargin}
+\end{figure}
 
 \end{document}  

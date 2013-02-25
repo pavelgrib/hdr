@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1361786852 "report.tex" "report.pdf" "report" 1361786854
+["pdflatex"] 1361796584 "report.tex" "report.pdf" "report" 1361796585
   "/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/inconsolata/fi4-ec.enc" 1244245552 7358 487386aecbb8989e31341f7851e7d7e2 ""
   "/usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc" 1276641224 6938 5135be6a8802f13a7faf296d1959a1ab ""
   "/usr/local/texlive/2012/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
@@ -121,9 +121,10 @@
   "grace_phong_1024_50.png" 1361786700 426200 fbe81024f61f23e3b8da3ff19a48a31a ""
   "grace_phong_256_10.png" 1361786660 422769 b2fb022ec9bc0be0574e466ab343e5d6 ""
   "logo_imperial_college_london.png" 1361150196 189836 6509646cda71f7516229a7ba8af55771 ""
-  "report.aux" 1361786854 1853 6b9b046178cd7cbfc71154f392ea3639 ""
-  "report.lof" 1361786854 837 3714e3b6e326d37ac85e3ed09cfed0c4 ""
-  "report.tex" 1361786852 9797 37f86f3231011392ab604bc34327ff5c ""
+  "report.aux" 1361796585 2183 aeeccc5c9c681e7c2366b455809eaf21 ""
+  "report.lof" 1361796585 953 262308958121a8d02ca99cc3c860c565 ""
+  "report.tex" 1361796583 11490 a3546ffb4f6797b5c3be4d700ee3f8ff ""
+  "sampled_sphere.png" 1361793750 7114 300769da772ec5f93c70f652042195d1 ""
   (generated)
   "report.lof"
   "report.aux"

@@ -92,7 +92,7 @@ class FPSampler:
 		f = np.vectorize(upTo255)
 		return f(pfmData)
 
-	def imageValues(samples):
+	def imageValues(self, samples):
 		values = list(len(samples))
 		for i, sample in enumerate(samples):
 			values[i] = self.npData[sample[0], sample[1]]

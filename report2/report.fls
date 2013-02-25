@@ -258,6 +258,9 @@ INPUT ./grace_phong_1024_50.png
 INPUT ./grace_phong_1024_50.png
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/vf/mathdesign/mdbch/mdbchr7t.vf
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/mathdesign/mdbch/md-chr7t.tfm
+INPUT sampled_sphere.png
+INPUT ./sampled_sphere.png
+INPUT ./sampled_sphere.png
 INPUT report.aux
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/inconsolata/fi4-ec.enc
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc

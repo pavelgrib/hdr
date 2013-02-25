@@ -7,3 +7,5 @@
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Grace Cathedral sampled via CDF Inversion with 1024 samples }}{7}
 \contentsline {figure}{\numberline {2.4}{\ignorespaces Grace Cathedral sampled via Phong with 256 samples and $n=5$ }}{8}
 \contentsline {figure}{\numberline {2.5}{\ignorespaces Grace Cathedral sampled via Phong with 1024 samples and $n=50$ }}{9}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Mapping of MC Samples onto Sphere }}{11}

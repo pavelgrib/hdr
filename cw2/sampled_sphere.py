@@ -19,7 +19,12 @@ def cartesianCoord( sphericalCoord ):
 	x = math.sin( theta ) * math.cos( phi )
 	y = math.sin( theta ) * math.sin( phi )
 	z = math.cos( theta )
-	return (x, y, z)
+	return x, y, z
+
+def thetaPhiFromLatlong( i, j, latlongData ):
+	theta = i * math.pi / latlongData.shape[0]
+	phi = j * 2 * math.pi / latlongData.shape[1]
+	return theta, phi
 
 def reflectedVector(v, n):
 	return np.dot(n, v) * n - v
@@ -47,12 +52,32 @@ class SampledSphere:
 
 	def precomputeIntegral(self, imageData):
 		self.integral = 0.0
-		for idx, v in np.ndenumerate(imageData):
-			self.integral += v / N
+		luminance = np.average(imageData, axis=2)
+		d_theta = math.pi / float(luminance.shape[0])
+		d_phi = 2*math.pi / float(luminance.shape[1])
+		for idx, v in np.ndenumerate(luminance):
+			theta = d_theta * idx[0]
+			d_omega = math.sin(theta) * d_theta * d_phi
+			self.integral += v * d_omega
 
-	def mapSamples(self, samples):
-		for sample in samples:
+	def monteCarloSum(self, sampleValues, spherePixel):
+		self.mcSum = 0.0
+		theta = spherePoint[0] * 2 * math.pi / (self.diameter + 1)
+		for s in sampleValues:
+			self.mcSum += cos(theta) * (s / norm(s)) / math.pi
 
+	def mapSamplesOntoSphere(self, sampler, numSamples):
+		if not self.data:
+			self.emptySphere()
+		if not self.integral:
+			self.precomputeIntegral(sampler.npData)
+
+		samples = sampler.cdfSamples(numSamples)
+		sampleValues = sampler.sampleValues()
+		for i, v in np.ndenumerate(self.data[self.data!=0]):
+			theta, phi = thetaPhiFromLatlong((i[0], i[1]), npData)
+			x,y,z = cartesianCoord( (theta, phi) )
+			rgbValue = self.integral * monteCarloSum(sampleValues, (i))
 
 	def saveSphereImage(self, filepath, asFloatingPoint):
 		pass
