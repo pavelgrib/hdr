@@ -44,6 +44,7 @@ void generateCDFSamples(const FP_IMG* emImage, FP_IMG* sampledImage, const int n
         for ( j = 0; j < width; ++j ) {
             rowAvg[i] += (luminance[i*width + j] - rowAvg[i])/(j+1);
         }
+        
     }
     // now sample numSamples values and color the picture in 5x5 blocks in green
     int x, y;
@@ -54,7 +55,7 @@ void generateCDFSamples(const FP_IMG* emImage, FP_IMG* sampledImage, const int n
         // now color the image with a 5x5 grid
         int lowerX = (int)fmax(0, x-2), upperX = (int)fmin(x+2, width);
         int lowerY = (int)fmax(0, y-2), upperY = (int)fmin(y+2, height);
-//        printf("%d, %d\n", x, y);
+        printf("%d, %d\n", x, y);
         for ( i = lowerY; i < upperY; ++i ) {
             for ( j = lowerX; j < upperX; ++j ) {
                 sampledImage->data[(i*width + j)*numComponents] = 0;
@@ -70,24 +71,24 @@ void generateCDFSamples(const FP_IMG* emImage, FP_IMG* sampledImage, const int n
 
 float* calculateLuminance(const FP_IMG* img) {
     unsigned int height = img->height, width = img->width, nComp = img->numComponents;
-    unsigned int i, j, k, idx;
+    unsigned int i, j, k;
     float* luminance = (float*) calloc(sizeof(float), height*width);
     float lumAvg;
     for ( i = 0; i < height; ++i ) {
         for ( j = 0; j < width; ++j ) {
             lumAvg = 0.0;
             for ( k = 0; k < nComp; ++k ) {
-                idx = (i*width + j)*nComp + k;
-                lumAvg += (img->data[idx] - lumAvg) / (k+1);
+                lumAvg += (img->data[(i*width + j)*nComp + k] - lumAvg) / (k+1);
             }
-            luminance[i*img->width + j] = lumAvg;
+            luminance[i*width + j] = lumAvg;
         }
     }
     return luminance;
 }
 
 void generatePhongSamples(const FP_IMG* emImage, FP_IMG* sampledImage, const int numSamples) {
-    
+    unsigned int height = emImage->height, width = emImage->width, nComp = emImage->numComponents;
+    unsigned int i, j, k;
 }
 
 int sample(float* data, unsigned int length) {

@@ -10,6 +10,7 @@
 #define hdr_loaders_h
 
 #include "loadPNM.h"
+#include <math.h>
 
 void CreateAndSavePFM(const char* image_out);
 void LoadAndSavePPM(const char* image_in, const char* image_out);
