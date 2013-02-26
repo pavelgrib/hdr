@@ -84,13 +84,14 @@ int main(int count, char** argv) {
     char graceEMPath[1024];
     concatenate(graceEMDir, "grace_latlong.pfm", graceEMPath);
     char pfmFileName[1024], ppmFileName[1024];
-    char pfmPath[1024], ppmPath[1024];
-    
+    char ppmPath[1024], pfmPath[1024];
     FP_IMG* grace_em = (FP_IMG*) malloc(sizeof(FP_IMG));
+    
+
     loadPFM(graceEMPath, grace_em);
 
-    WritePFM("/Users/paul/Destop.test.pfm", grace_em);
-    LoadPFMAndSavePPM("/Users/paul/Destop.test.pfm", "/Users/paul/Destop.test.ppm");
+//    WritePFM("/Users/paul/Destop.test.pfm", grace_em);
+//    LoadPFMAndSavePPM("/Users/paul/Destop.test.pfm", "/Users/paul/Destop.test.ppm");
     
     FP_IMG* cdf_sampled = (FP_IMG*) malloc(sizeof(FP_IMG));
     FP_IMG* phong_sampled = (FP_IMG*) malloc(sizeof(FP_IMG));
@@ -112,8 +113,6 @@ int main(int count, char** argv) {
     
     cleanupFP(cdf_sampled);
     cleanupFP(grace_em);
-    
-    
     
     
     

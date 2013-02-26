@@ -1,5 +1,4 @@
 #!/usr/bin/bash
-
 import numpy as np
 from scipy.linalg import norm, det
 import PIL.Image as Image

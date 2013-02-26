@@ -162,7 +162,7 @@ void LoadPFMAndSavePPM(const char* image_in, const char* image_out) {
                 dataPoint = pfmImage->data[index];
                 minPixel = pfmImage->minVal[k];
                 stretch = 255.0f;
-				ppmImage->data[index] = (unsigned char) (dataPoint * stretch);
+				ppmImage->data[index] = (unsigned char) (fmin(255.0f, dataPoint * stretch));
 //				ppmImage->data[index + 1] = (unsigned char) (pfmImage->data[index + 1]*255.0f);//G
 //				ppmImage->data[index + 2] = (unsigned char) (pfmImage->data[index + 2]*255.0f);//B
 //                if ( i == 255 && j == 255 ) {
