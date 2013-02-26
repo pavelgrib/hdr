@@ -29,30 +29,30 @@ class Sphere:
 
 class SphereRenderer:
 	def __init__(self, diameter):
-		self.diameter = diameter
-		self.radius = diameter / 2
-		self.center = (radius, radius)
+		self.sphere = Sphere([0,0,0], 2.0)
 		self.data = np.zeros( (diameter, diameter) )
 
-	def shadeSphereAtPoint(self, point, rgbValue):
-		data[point, :] = rgbValue
+	def shadeSphereAtPoint(self, polarCoord, rgbValues):
+		xyzCoord = self.sphere.xyzPoint(polarCoord[0], polarCoord[1])
+		idx = map(int, self.mapXYToPixel(xyzCoord))
+		print idx
+		self.data[idx, :] = rgbValues
 
 	def mapXYToPixel(self, xyCoord):
 		""" x and y go from -1 to +1 """
 		result = np.zeros(2)
-		result[0] = diameter * (y + 1) / 2.0
-		result[1] = diameter * (x + 1) / 2.0
+		result[0] = self.sphere.diameter * (xyCoord[0] + 1) / 2.0
+		result[1] = self.sphere.diameter * (xyCoord[1] + 1) / 2.0
 		return result
 
-	def mapLatLongPixels(self, latlong, diameter, data):
-		""" latlong is a n - by - m - by 3 numpy array """
-		dims = latlong.shape
-		theta = np.linspace(0, pi, llShape[0])
-		phi = np.linspace(0, 2*pi, llShape[1])
-		xPos = map( lambda x: int( diameter * (sin(x[0])*sin(x[1]))), \
-			zip(theta, phi) )
-		yPos = map( lambda x: int( diameter * (0.5 + 0.5*cos(x)) ), theta )
-		for i, v in np.ndenumerate(latlong): 
-			data[xPos[i[0]], yPos[i[1]], i[3]] = latlong[i]
-		return data
-
+	# def mapLatLongPixels(self, latlong, diameter, data):
+	# 	""" latlong is a n - by - m - by 3 numpy array """
+	# 	dims = latlong.shape
+	# 	theta = np.linspace(0, pi, llShape[0])
+	# 	phi = np.linspace(0, 2*pi, llShape[1])
+	# 	xPos = map( lambda x: int( diameter * (sin(x[0])*sin(x[1]))), \
+	# 		zip(theta, phi) )
+	# 	yPos = map( lambda x: int( diameter * (0.5 + 0.5*cos(x)) ), theta )
+	# 	for i, v in np.ndenumerate(latlong): 
+	# 		data[xPos[i[0]], yPos[i[1]], i[3]] = latlong[i]
+	# 	return data

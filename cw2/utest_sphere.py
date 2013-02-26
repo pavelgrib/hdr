@@ -1,7 +1,9 @@
 import numpy as np
 from math import pi
-from sphere import Sphere
+from sphere import Sphere, SphereRenderer
 import unittest
+
+tol = 1e-10
 
 class TestSphereFunctions(unittest.TestCase):
 
@@ -26,7 +28,19 @@ class TestSphereFunctions(unittest.TestCase):
         theta = pi/4.0
         phi = pi/2.0
         predictedR = self.sphere.reflection(v, theta, phi)
-        self.assertTrue(np.allclose([0,1,0], predictedR, atol=1e-8))
+        self.assertTrue(np.allclose([0,1,0], predictedR, atol=tol))
+
+
+class TestSphereRenderer(unittest.TestCase):
+
+    def setUp(self):
+        self.renderer = SphereRenderer(511)
+
+    def test_ShadeSphereAtPoint(self):
+        pt = [0, 0]
+        val = [3,4,5]
+        self.renderer.shadeSphereAtPoint(pt, val)
+        self.assertTrue(np.allclose(self.renderer.data[0,255,:], val, atol=tol))
 
 if __name__ == '__main__':
     unittest.main()
