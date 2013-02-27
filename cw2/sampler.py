@@ -5,7 +5,7 @@ import math, sys, functools
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import array
+from imageIO import loadPFMFile, writePFMFile
 
 def upTo255(x):
 	if x >= 1.0:
@@ -16,29 +16,9 @@ def upTo255(x):
 class FPSampler:
 	def __init__(self, filepath):
 		self.filepath = filepath
-		pfmFile = open(filepath, 'rb')
-		pfmFile.readline()
-		dims = pfmFile.readline()
-		self.width = int(dims.split()[0])
-		self.height = int(dims.split()[1])
-		self.numChannels = 3
-		pfmFile.readline()
-		data = array.array('f')
-		data.read(pfmFile, self.width * self.height * 3)
-		npData = np.array(data)
-		npData.shape = (self.height, self.width, self.numChannels)
-		self.npData = npData[::-1]
-		pfmFile.close()
-	
-	def writePFMFile(self, filepath, data):
-		f = open(filepath, 'wb')
-		f.write('FP\0x0a\0x0a')
-		f.write(str(self.npData.shape[0]) + ' ' + str(self.npData.shape[1]) + '\0x0a')
-		f.write('-1.0\0x0a')
-		rev = self.npData[::-1].astype(np.float32)
-		rev.tofile(f)
-		f.flush()
-		f.close()
+		self.npData = loadPFMFile( filepath )
+		self.height =  self.npData.shape[0]
+		self.width = self.npData.shape[1]
 
 	def cdfSamples(self, numSamples):
 		lum = np.average(self.npData, axis=2)
@@ -105,13 +85,13 @@ if __name__ == '__main__':
 		mc_samples = sampler.cdfSamples(i)
 		mc_sampled_image = sampler.applySamplesToImage(mc_samples)
 		mc_ppm = sampler.toPPM(mc_sampled_image)
-		sampler.writePFMFile(workingdir + 'grace_cdf' + str(i) + '.pfm', mc_sampled_image)
+		writePFMFile(workingdir + 'grace_cdf' + str(i) + '.pfm', mc_sampled_image)
 		img = Image.fromarray(np.uint8(mc_ppm))
 		img.save('grace_cdf_' + str(i) + '.ppm')
 		for j in [1, 10, 50, 200]:
 			phong_samples = sampler.phongSamples(i, j)
 			phong_sampled_image = sampler.applySamplesToImage(phong_samples)
 			phong_ppm = sampler.toPPM(phong_sampled_image)
-			sampler.writePFMFile(workingdir + 'phong_' + str(i) + '_' + str(j) + '.pfm', phong_sampled_image)
+			writePFMFile(workingdir + 'phong_' + str(i) + '_' + str(j) + '.pfm', phong_sampled_image)
 			img = Image.fromarray(np.uint8(phong_ppm))
 			img.save('grace_phong_' + str(i) + '_' + str(j) + '.ppm')

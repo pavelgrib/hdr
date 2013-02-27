@@ -3,7 +3,7 @@ from math import pi
 from sphere import Sphere, SphereRenderer
 import unittest
 
-tol = 1e-10
+tol = 1e-11
 
 class TestSphereFunctions(unittest.TestCase):
 
@@ -36,11 +36,16 @@ class TestSphereRenderer(unittest.TestCase):
     def setUp(self):
         self.renderer = SphereRenderer(511)
 
+    def test_mapXYToPixel(self):
+        xyCoord = [0,1]
+        pixIdx = self.renderer.mapXYToPixel(xyCoord)
+        self.assertTrue( np.allclose( [255, 0], pixIdx))
+
     def test_ShadeSphereAtPoint(self):
-        pt = [0, 0]
+        pt = [pi/2, 0]
         val = [3,4,5]
         self.renderer.shadeSphereAtPoint(pt, val)
-        self.assertTrue(np.allclose(self.renderer.data[0,255,:], val, atol=tol))
+        self.assertTrue(np.allclose(self.renderer.data[510,255,:], val, atol=tol))
 
 if __name__ == '__main__':
     unittest.main()
