@@ -94,14 +94,14 @@ class SphereRenderer:
 		integral = np.average(latlong)
 		d = self.pixelDiameter
 		for i in range(d):
+			print i
 			for j in range(d):
 				y = 1.0 - 2.0 * float(i) / (d - 1)
 				x = 2.0 * ((d - 1) - float(j)) / (d - 1) - 1.0
 				if self.insideRenderedSphere( [x, y] ):
 					z = sqrt( round(1.0 - x*x - y*y, 10) )
 					val = np.zeros(3)
-					for s in samples:
-						theta = s[0] * pi / (latlong.shape[0] - 1)
-						val = val + cos(theta)/ pi * latlong[s] / norm(latlong[s])
-					val = val * integral / len(samples)
+					normalized = map( lambda x: x / norm(x), latlong[zip(*samples)] )
+					theta = np.array(zip(*samples)[0]) * pi / (latlong.shape[0] - 1)
+					val= np.sum( np.cos(theta) * np.array(normalized).T / pi)
 					self.data[i,j,:] = val
