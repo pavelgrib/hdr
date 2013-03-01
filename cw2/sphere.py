@@ -6,6 +6,7 @@ from imageIO import loadPFMFile
 
 tol = 1e-8
 
+
 def latlongToAngular(latlong, heightIdx, widthIdx):
 	height = float(latlong.shape[0])
 	width = float(latlong.shape[1])
@@ -25,9 +26,8 @@ class Sphere:
 	def normal(self, theta, phi):
 		return self.xyzPoint(theta, phi) - self.center
 
-	def reflection(self, view, theta, phi):
-		n = self.normal(theta, phi)
-		return 2.0 * np.dot(n, view) * n - view
+	def reflection(self, view, normal):
+		return 2.0 * np.dot(normal, view) * normal - view
 
 	def xyzPoint(self, theta, phi):
 		x = np.around( self.radius * sin(theta) * cos(phi), 12 )
@@ -49,7 +49,7 @@ class SphereRenderer:
 	def __init__(self, diameter):
 		self.sphere = Sphere([0,0,0], 2.0)
 		self.data = np.zeros( (diameter, diameter, 3), dtype=np.float32 )
-		self.diameter = diameter
+		self.pixelDiameter = diameter
 		self.radius = 1.0
 
 	def insideRenderedSphere(self, xyCoord ):
@@ -75,9 +75,11 @@ class SphereRenderer:
 		""" for each point inside the rendered sphere, calculate where it reflects 
             to on the latlong map from the view of [0,0,1] """
 		# determining which points in self.data are to be shaded
+		# this is really bad, needs to be vectorized for performance
+		# right now, takes a few seconds for 512 x 1024
 		d = self.pixelDiameter
-		for i in range(self.pixelDiameter):
-			for j in range(self.pixelDiameter):
+		for i in range(d):
+			for j in range(d):
 				y = 1.0 - 2.0 * float(i) / (d - 1)
 				x = 2.0 * ((d - 1) - float(j)) / (d - 1) - 1.0
 				if self.insideRenderedSphere( [x, y] ):
@@ -85,5 +87,21 @@ class SphereRenderer:
 					r = self.sphere.reflection( view, np.array([x, y, z]) )
 					[theta, phi] = self.sphere.sphericalCoord( r )
 					llx = int( (latlong.shape[0] - 1) * theta / pi )
-					lly = int( (latlong.shape[1] - 1) * (pi + phi) / (2*pi) )
+					lly = int( (latlong.shape[1] - 1) * (pi/2 + phi) / (2*pi) )
 					self.data[i, j, :] = latlong[llx, lly, :]
+
+	def mapLatlongSamples(self, latlong, samples):
+		integral = np.average(latlong)
+		d = self.pixelDiameter
+		for i in range(d):
+			for j in range(d):
+				y = 1.0 - 2.0 * float(i) / (d - 1)
+				x = 2.0 * ((d - 1) - float(j)) / (d - 1) - 1.0
+				if self.insideRenderedSphere( [x, y] ):
+					z = sqrt( round(1.0 - x*x - y*y, 10) )
+					val = np.zeros(3)
+					for s in samples:
+						theta = s[0] * pi / (latlong.shape[0] - 1)
+						val = val + cos(theta)/ pi * latlong[s] / norm(latlong[s])
+					val = val * integral / len(samples)
+					self.data[i,j,:] = val
