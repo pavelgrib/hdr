@@ -2,8 +2,10 @@ import numpy as np
 from math import pi
 from sphere import Sphere, SphereRenderer
 import unittest
+import imageIO
 
 tol = 1e-11
+testdir = '/Users/paul/github/hdr/tests/'
 
 class TestSphereFunctions(unittest.TestCase):
 
@@ -46,6 +48,35 @@ class TestSphereRenderer(unittest.TestCase):
         val = [3,4,5]
         self.renderer.shadeSphereAtPoint(pt, val)
         self.assertTrue(np.allclose(self.renderer.data[510,255,:], val, atol=tol))
+
+class TestImageReadWRite(unittest.TestCase):
+    def setUp(self):
+        self.ppmFilepath = '/Users/paul/github/hdr/GraceCathedral/grace_latlong.ppm'
+        self.pfmFilepath = '/Users/paul/github/hdr/GraceCathedral/grace_latlong.pfm'
+
+    def test_readPFM(self):
+        d = imageIO.loadPFMFile( self.pfmFilepath )
+        self.assertTrue( d.shape == (512, 1024, 3) )
+        self.assertTrue( np.average(d) >= 0.01 and np.average(d) <= 0.99 )
+
+    def test_writePFM(self):
+        d = np.random.uniform( size = (512, 1024, 3) )
+        imageIO.writePFMFile( testdir + 'writing.pfm', d )
+        loadedData = imageIO.loadPFMFile( testdir + 'writing.pfm' )
+        self.assertTrue( np.allclose( d, loadedData ) )
+
+    def test_readPPM(self):
+        d = imageIO.loadPPMFile( self.ppmFilepath )
+        self.assertTrue( d.shape == (512, 1024, 3) )
+        self.assertTrue( np.average(d) >= 1 and np.average(d) <= 254 )
+
+    def test_writePPM(self):
+        d = np.random.uniform( size = (512, 1024, 3) )
+        dppm = imageIO.toPPM(d)
+        imageIO.writePFMFile( testdir + 'writing.ppm', dppm )
+        loadedData = imageIO.loadPFMFile( testdir + 'writing.ppm' )
+        self.assertTrue( np.array_equal( dppm, loadedData ) )        
+
 
 if __name__ == '__main__':
     unittest.main()

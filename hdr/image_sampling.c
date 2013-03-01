@@ -87,8 +87,8 @@ float* calculateLuminance(const FP_IMG* img) {
 }
 
 void generatePhongSamples(const FP_IMG* emImage, FP_IMG* sampledImage, const int numSamples) {
-    unsigned int height = emImage->height, width = emImage->width, nComp = emImage->numComponents;
-    unsigned int i, j, k;
+//    unsigned int height = emImage->height, width = emImage->width, nComp = emImage->numComponents;
+//    unsigned int i, j, k;
 }
 
 int sample(float* data, unsigned int length) {

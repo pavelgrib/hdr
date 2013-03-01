@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA080B9216E0331C00D87789 /* sphere.c in Sources */ = {isa = PBXBuildFile; fileRef = DA080B9116E0331C00D87789 /* sphere.c */; };
 		DA33AF9316C710C7004D9D5A /* hdr.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA33AF9216C710C7004D9D5A /* hdr.1 */; };
 		DA33AFA616C71126004D9D5A /* hdr.c in Sources */ = {isa = PBXBuildFile; fileRef = DA33AF9A16C71126004D9D5A /* hdr.c */; };
 		DA33AFA716C71126004D9D5A /* loadPNM.c in Sources */ = {isa = PBXBuildFile; fileRef = DA33AF9D16C71126004D9D5A /* loadPNM.c */; };
@@ -31,6 +32,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DA080B9116E0331C00D87789 /* sphere.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sphere.c; sourceTree = "<group>"; };
+		DA080B9316E0332500D87789 /* sphere.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sphere.h; sourceTree = "<group>"; };
+		DA080B9416E034F400D87789 /* vector3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vector3.h; sourceTree = "<group>"; };
 		DA0F9FB716D59A8100B30C52 /* Pixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pixel.h; sourceTree = "<group>"; };
 		DA33AF8D16C710C7004D9D5A /* hdr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hdr; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA33AF9216C710C7004D9D5A /* hdr.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hdr.1; sourceTree = "<group>"; };
@@ -111,6 +115,8 @@
 				DA33AFB016C8907C004D9D5A /* relighting.h */,
 				DA33AF9A16C71126004D9D5A /* hdr.c */,
 				DA33AF9B16C71126004D9D5A /* hdr.h */,
+				DA080B9116E0331C00D87789 /* sphere.c */,
+				DA080B9316E0332500D87789 /* sphere.h */,
 			);
 			name = HDR;
 			sourceTree = "<group>";
@@ -125,6 +131,7 @@
 				DA33AF9C16C71126004D9D5A /* img.h */,
 				DA33AF9D16C71126004D9D5A /* loadPNM.c */,
 				DA33AF9E16C71126004D9D5A /* loadPNM.h */,
+				DA080B9416E034F400D87789 /* vector3.h */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -196,6 +203,7 @@
 				DA33AFAF16C89075004D9D5A /* relighting.c in Sources */,
 				DA783A6F16CA7DD0006E70E8 /* vectorOps.c in Sources */,
 				DA921F3516D1C1310015F265 /* image_sampling.c in Sources */,
+				DA080B9216E0331C00D87789 /* sphere.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
